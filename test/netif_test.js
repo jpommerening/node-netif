@@ -1,4 +1,4 @@
-var netif = require('bindings')('netif');
+var netif = require('../lib/netif');
 
 var os = require('os');
 
@@ -17,7 +17,7 @@ exports['netif'] = {
       case 'linux':
         if (process.env.TRAVIS) // cause travis is different..
             test.ok(netif.getMacAddress('venet0'), "should not error out"); // linux
-	else
+        else
             test.ok(netif.getMacAddress('eth0'), "should not error out"); // linux
         break;
       case 'sunos':
@@ -26,6 +26,11 @@ exports['netif'] = {
       default:
         throw Error('unsupported os for this module.');
     }
+    test.done();
+  },
+  'should look up a non-loopback interface given no ethernet interface name': function (test) {
+    test.expect(1);
+    test.ok(netif.getMacAddress(), "should not error out");
     test.done();
   }
 };
